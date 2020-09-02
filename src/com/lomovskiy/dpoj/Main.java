@@ -1,32 +1,24 @@
 package com.lomovskiy.dpoj;
 
-import com.lomovskiy.dpoj.template.Bodybuilder;
-import com.lomovskiy.dpoj.template.Cyclist;
-import com.lomovskiy.dpoj.template.Runner;
-import com.lomovskiy.dpoj.template.Sportsman;
-import com.lomovskiy.dpoj.visitor.drawer.BlackWhiteDrawer;
-import com.lomovskiy.dpoj.visitor.drawer.ColorDrawer;
-import com.lomovskiy.dpoj.visitor.figure.Circle;
-import com.lomovskiy.dpoj.visitor.figure.Figure;
-import com.lomovskiy.dpoj.visitor.figure.Rectangle;
-import com.lomovskiy.dpoj.visitor.figure.Triangle;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.function.Consumer;
+import com.lomovskiy.dpoj.chain.Request;
+import com.lomovskiy.dpoj.chain.RequestException;
+import com.lomovskiy.dpoj.chain.handler.*;
+import com.sun.istack.internal.NotNull;
 
 public class Main {
 
     public static void main(String[] args) {
-        final @NotNull ArrayList<Figure> figures = new ArrayList<>(3);
-        figures.add(new Rectangle());
-        figures.add(new Triangle());
-        figures.add(new Circle());
+        final @NotNull Request request = new Request();
+        final RequestConditionHandler locationConditionHandler = new LocationRequestConditionHandler(null);
+        final RequestConditionHandler facilityArriveConditionHandler = new FacilityArriveRequestConditionHandler(locationConditionHandler);
+        final RequestConditionHandler jobArriveConditionHandler = new JobArriveRequestConditionHandler(facilityArriveConditionHandler);
+        final RequestConditionHandler statusConditionHandler = new StatusRequestConditionHandler(jobArriveConditionHandler);
 
-        final @NotNull ColorDrawer colorDrawer = new ColorDrawer();
-        final @NotNull BlackWhiteDrawer blackWhiteDrawer = new BlackWhiteDrawer();
+        try {
+            statusConditionHandler.checkCondition(request);
+        } catch (RequestException e) {
 
-        figures.forEach(colorDrawer::draw);
+        }
     }
 
 }
