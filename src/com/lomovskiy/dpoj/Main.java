@@ -1,24 +1,20 @@
 package com.lomovskiy.dpoj;
 
-import com.lomovskiy.dpoj.chain.Request;
-import com.lomovskiy.dpoj.chain.RequestException;
-import com.lomovskiy.dpoj.chain.handler.*;
+import com.lomovskiy.dpoj.command.Invoker;
+import com.lomovskiy.dpoj.command.command.Command;
+import com.lomovskiy.dpoj.command.command.ConcreteCommand;
+import com.lomovskiy.dpoj.command.receiver.Receiver;
+import com.lomovskiy.dpoj.command.receiver.ReceiverImpl;
 import com.sun.istack.internal.NotNull;
 
 public class Main {
 
     public static void main(String[] args) {
-        final @NotNull Request request = new Request();
-        final RequestConditionHandler locationConditionHandler = new LocationRequestConditionHandler(null);
-        final RequestConditionHandler facilityArriveConditionHandler = new FacilityArriveRequestConditionHandler(locationConditionHandler);
-        final RequestConditionHandler jobArriveConditionHandler = new JobArriveRequestConditionHandler(facilityArriveConditionHandler);
-        final RequestConditionHandler statusConditionHandler = new StatusRequestConditionHandler(jobArriveConditionHandler);
-
-        try {
-            statusConditionHandler.checkCondition(request);
-        } catch (RequestException e) {
-
-        }
+        final @NotNull Invoker invoker = new Invoker();
+        final @NotNull Receiver receiver = new ReceiverImpl();
+        final @NotNull Command command = new ConcreteCommand(receiver);
+        invoker.setCommand(command);
+        invoker.run();
     }
 
 }
