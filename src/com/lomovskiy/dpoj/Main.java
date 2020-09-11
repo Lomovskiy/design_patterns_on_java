@@ -1,20 +1,31 @@
 package com.lomovskiy.dpoj;
 
-import com.lomovskiy.dpoj.command.Invoker;
-import com.lomovskiy.dpoj.command.command.Command;
-import com.lomovskiy.dpoj.command.command.ConcreteCommand;
-import com.lomovskiy.dpoj.command.receiver.Receiver;
-import com.lomovskiy.dpoj.command.receiver.ReceiverImpl;
-import com.sun.istack.internal.NotNull;
+import com.lomovskiy.dpoj.creational.abstract_factory.Button;
+import com.lomovskiy.dpoj.creational.abstract_factory.CheckBox;
+import com.lomovskiy.dpoj.creational.abstract_factory.TextField;
+import com.lomovskiy.dpoj.creational.abstract_factory.UIAbstractFactory;
+import com.lomovskiy.dpoj.creational.abstract_factory.android.AndroidUIFactory;
+import com.lomovskiy.dpoj.creational.abstract_factory.ios.IOSUIFactory;
+import org.jetbrains.annotations.NotNull;
 
 public class Main {
 
     public static void main(String[] args) {
-        final @NotNull Invoker invoker = new Invoker();
-        final @NotNull Receiver receiver = new ReceiverImpl();
-        final @NotNull Command command = new ConcreteCommand(receiver);
-        invoker.setCommand(command);
-        invoker.run();
+        @NotNull UIAbstractFactory uiFactory = new IOSUIFactory();
+        @NotNull Button button = uiFactory.getButton();
+        @NotNull CheckBox checkBox = uiFactory.getCheckBox();
+        @NotNull TextField textField = uiFactory.getTextField();
+        System.out.println(button);
+        System.out.println(checkBox);
+        System.out.println(textField);
+        System.out.println("------------");
+        uiFactory = new AndroidUIFactory();
+        button = uiFactory.getButton();
+        checkBox = uiFactory.getCheckBox();
+        textField = uiFactory.getTextField();
+        System.out.println(button);
+        System.out.println(checkBox);
+        System.out.println(textField);
     }
 
 }
